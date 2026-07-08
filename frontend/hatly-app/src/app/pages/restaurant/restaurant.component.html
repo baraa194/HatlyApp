@@ -1,0 +1,143 @@
+<div class="branch-page">
+
+  @if (isLoading) {
+    <div class="state-loading">
+      <div class="state-loading-icon">⏱</div>
+      <h3>Checking delivery availability...</h3>
+    </div>
+  }
+
+  @if (!isLoading && errorMessage) {
+    <div class="error-card">
+      <div class="error-icon">📍</div>
+      <h4>Outside delivery zone</h4>
+      <p>{{ errorMessage }}</p>
+      <button class="error-btn" [routerLink]="['/home']">
+        Back to restaurants
+      </button>
+    </div>
+  }
+
+  @if (!isLoading && nearestBranchData) {
+
+    <div class="branch-header">
+      <div class="branch-header-top">
+
+        <div class="branch-info">
+          <h2>{{ nearestBranchData.label }}</h2>
+          <p class="branch-address">📍 {{ nearestBranchData.addressDetailed }}</p>
+        </div>
+
+        <div class="branch-actions">
+
+          @if (nearestBranchData.acceptOrders) {
+            <span class="status-badge status-open">🟢 Accepting orders</span>
+          } @else {
+            <span class="status-badge status-closed">🔴 Busy / closed</span>
+          }
+
+          <div class="cart-btn" [routerLink]="['/cart']">
+            <span class="cart-icon">🛒</span>
+            @if (cartCount > 0) {
+              <span class="cart-count">{{ cartCount }}</span>
+            }
+          </div>
+
+        </div>
+
+      </div>
+
+      <hr class="branch-divider">
+
+      <div class="branch-meta">
+        <div class="meta-item">
+          <span class="meta-icon">⏱</span>
+          <span class="meta-label">Working hours:</span>
+          {{ nearestBranchData.openAt.substring(0, 5) }} - {{ nearestBranchData.closeAt.substring(0, 5) }}
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">💵</span>
+          <span class="meta-label">Currency:</span>
+          {{ nearestBranchData.currency }}
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">🚀</span>
+          <span class="meta-label">Delivery radius:</span>
+          {{ nearestBranchData.deliveryRadius }} KM
+        </div>
+      </div>
+    </div>
+
+    <div class="categories-section">
+      <h4 class="section-title">Categories</h4>
+      <div class="categories-row">
+
+        <span
+          (click)="resetToAll()"
+          class="category-pill"
+          [class.active]="selectedCategory === 'All'">
+          All
+        </span>
+
+        @for (category of categoriesList; track category.id) {
+          <span
+            (click)="onCategorySelect(category.name)"
+            class="category-pill"
+            [class.active]="selectedCategory === category.name">
+            {{ category.name }}
+          </span>
+        }
+
+      </div>
+    </div>
+
+    <div class="products-section">
+      <h4 class="section-title">
+        {{ selectedCategory === 'All' ? 'Popular items' : selectedCategory + ' items' }}
+      </h4>
+
+      <div class="products-grid">
+
+        @for (product of productsList; track product.id) {
+          <div class="product-card" [style.opacity]="product.isAvailable ? '1' : '0.6'">
+
+            <div class="product-info">
+              <h6 class="product-name">{{ product.name }}</h6>
+              <p class="product-desc">{{ product.description }}</p>
+
+              <div class="product-footer">
+                <div class="product-price-row">
+                  <span class="product-price">{{ product.price }} {{ nearestBranchData?.currency }}</span>
+
+                  @if (!product.isAvailable || product.stock === 0) {
+                    <span class="badge-outofstock">Out of stock</span>
+                  }
+                </div>
+
+                <button
+                  (click)="addToCart(product)"
+                  [disabled]="!product.isAvailable || product.stock === 0"
+                  class="add-btn"
+                  [class.add-btn-disabled]="!product.isAvailable || product.stock === 0">
+                  🛒 Add
+                </button>
+              </div>
+            </div>
+
+            <img
+              class="product-image"
+              [src]="product.imgUrl || 'https://cdn-icons-png.flaticon.com/512/706/706164.jpg'"
+              [alt]="product.name">
+          </div>
+        } @empty {
+          <div class="products-empty">
+            No products available in this category. 🍽️
+          </div>
+        }
+
+      </div>
+    </div>
+
+  }
+
+</div>

@@ -1,0 +1,69 @@
+<div class="tracking-page">
+
+  @if (loading) {
+    <div class="state-loading">
+      <div class="state-loading-icon">🔄</div>
+      <p>Loading tracking details...</p>
+    </div>
+  } @else if (trackingData) {
+
+    <div class="order-card">
+      <div class="order-card-top">
+        <h2 class="order-id">📦 Order #{{ trackingData.orderId }}</h2>
+        <span class="status-pill">{{ trackingData.orderStatus }}</span>
+      </div>
+      <p class="payment-line">
+        Payment: {{ trackingData.paymentStatus }} ({{ trackingData.providerName }})
+      </p>
+
+      <div class="status-stepper">
+        @for (step of statusSteps; track step.key) {
+          <div class="step" [class.completed]="isStepCompleted(step.key)" [class.active]="isStepActive(step.key)">
+            <div class="step-circle">{{ step.icon }}</div>
+            <span class="step-label">{{ step.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (!trackingData.agentId) {
+      <div class="searching-card">
+        <div class="searching-icon">🛵</div>
+        <h3>Looking for a delivery pilot...</h3>
+        <p>We are matching your order with the nearest available agent.</p>
+      </div>
+    }
+
+    @if (trackingData.agentId) {
+      <div class="captain-card">
+        <h3 class="captain-title">👨‍✈️ Your delivery captain</h3>
+
+        <div class="captain-details">
+          <div><strong>Name:</strong> {{ trackingData.agentName }}</div>
+          <div>
+            <strong>Phone:</strong>
+            <a href="tel:{{ trackingData.agentPhone }}" class="phone-link">{{ trackingData.agentPhone }}</a>
+          </div>
+          <div><strong>Vehicle:</strong> {{ trackingData.vehicleType }} ({{ trackingData.vehicleNumber }})</div>
+        </div>
+
+        <div class="captain-map">
+          <iframe
+            width="100%"
+            height="100%"
+            frameborder="0"
+            style="border:0"
+           [src]="mapUrl"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    }
+
+  } @else {
+    <div class="state-error">
+      ❌ Order tracking details not available.
+    </div>
+  }
+
+</div>

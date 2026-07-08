@@ -1,0 +1,124 @@
+<div class="home-page">
+
+  <!-- Delivery address -->
+  <div class="address-row">
+    <div class="dropdown">
+      <span class="address-label">Delivering to</span>
+
+      <button class="address-btn dropdown-toggle"
+              type="button"
+              id="addressDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+        📍 <span class="address-value">
+          {{ currentAddress ? currentAddress.label : 'Loading address...' }}
+        </span>
+      </button>
+
+      <ul class="dropdown-menu address-menu" aria-labelledby="addressDropdown">
+        @for (address of addressesList; track address.label) {
+          <li>
+            <button
+              class="address-item"
+              [class.selected]="address.label === currentAddress?.label"
+              (click)="onAddressChange(address)">
+              <div class="address-item-top">
+                <span class="address-item-name">{{ address.label }}</span>
+                @if (address.isDefault) {
+                  <span class="default-badge">Default</span>
+                }
+              </div>
+              <small class="address-item-detail">
+                Building {{ address.building }}, {{ address.street }}, {{ address.city }}
+              </small>
+            </button>
+          </li>
+        }
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <button class="add-address-btn">
+            + Add new address
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-row">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        placeholder="Search for a dish or restaurant">
+    </div>
+  </div>
+
+  <!-- Categories -->
+  @if (categoriesList.length > 0) {
+    <div class="categories-section">
+      <h5 class="section-title">What's on your mind? 🍕</h5>
+      <div class="categories-slider">
+        @for (category of categoriesList; track category) {
+          <div class="category-item">
+            <div class="category-img-box">
+              <img [src]="'assets/images/' + category.toLowerCase() + '.jpg'"
+                   onerror="this.src='https://cdn-icons-png.flaticon.com/512/706/706164.jpg'"
+                   [alt]="category">
+            </div>
+            <span class="category-label">
+              {{ category.toLowerCase().replace('_', ' ') }}
+            </span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="restaurants-section">
+    <h5 class="section-title">Popular restaurants</h5>
+
+    @if (!isLoading && !errorMessage) {
+      <div class="restaurants-list">
+        @for (restaurant of filteredRestaurants; track restaurant.id) {
+          <div class="restaurant-card"
+               [routerLink]="['/restaurant', restaurant.id]"
+               [state]="{ address: currentAddress }">
+
+            <div class="logo-container">
+              <img [src]="restaurant.logoUrl || 'assets/images/default-restaurant.png'"
+                   onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'"
+                   [alt]="restaurant.name"
+                   class="restaurant-logo">
+            </div>
+
+            <div class="restaurant-info">
+              <div class="restaurant-info-top">
+                <h6 class="restaurant-name">{{ restaurant.name }}</h6>
+                <span class="badge-status"
+                      [ngClass]="restaurant.status === 'ACTIVE' || restaurant.status === 'OPEN' ? 'badge-open' : 'badge-closed'">
+                  {{ restaurant.status }}
+                </span>
+              </div>
+
+              <div class="restaurant-meta">
+                <span class="rating">★ 4.6</span>
+                <span class="dot">•</span>
+                <span>⏱ 20-30 mins</span>
+                <span class="dot">•</span>
+              </div>
+            </div>
+
+          </div>
+        } @empty {
+          <div class="restaurants-empty">
+            No restaurants match "{{ searchTerm }}". 🍽️
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+</div>

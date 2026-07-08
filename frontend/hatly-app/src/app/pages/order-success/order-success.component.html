@@ -1,0 +1,23 @@
+<div class="success-container">
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Confirming your payment and updating your order...</p>
+  </div>
+
+  <div *ngIf="!loading && success" class="success-card">
+    <div class="icon-box">
+      <span class="checkmark">✓</span>
+    </div>
+    <h1>Payment Successful! 🎉</h1>
+    <p class="order-number">Your Order ID is: <strong>#{{ orderId }}</strong></p>
+    <p class="message">Thank you! Your order has been placed and is now being prepared.</p>
+    
+    <button routerLink="/cart" class="btn-return">Back to Cart</button>
+  </div>
+
+  <div *ngIf="!loading && !success" class="error-card">
+    <h1>Oops, Something Went Wrong! ❌</h1>
+    <p>We couldn't automatically confirm your payment. Please contact support with your Order ID: #{{ orderId }}</p>
+    <button routerLink="/cart" class="btn-return">Back to Cart</button>
+  </div>
+</div>

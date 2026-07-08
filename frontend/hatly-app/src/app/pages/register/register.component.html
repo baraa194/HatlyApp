@@ -1,0 +1,135 @@
+<div class="auth-page">
+  <div class="auth-container">
+    
+
+    <div class="auth-hero">
+      <div class="hero-content">
+        <div class="hero-icon">🍕</div>
+        <h1>Hatly</h1>
+        <p>Discover & share amazing recipes</p>
+      </div>
+    </div>
+
+
+    <div class="auth-form">
+      <div class="form-wrapper">
+        
+        <h2>Create Account</h2>
+        <p class="subtitle">Join our community of food lovers</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Role -->
+          <div class="form-group">
+            <label>I want to join as</label>
+            <div class="role-group">
+              <button 
+                type="button"
+                class="role-btn"
+                [class.active]="registerForm.get('role')?.value === 'CUSTOMER'"
+                (click)="registerForm.patchValue({ role: 'CUSTOMER' })">
+                Customer
+              </button>
+              <button 
+                type="button"
+                class="role-btn"
+                [class.active]="registerForm.get('role')?.value === 'RESTAURANT'"
+                (click)="registerForm.patchValue({ role: 'RESTAURANT' })">
+                Restaurant
+              </button>
+            </div>
+          </div>
+
+      
+          <div class="form-group">
+            <label>Full Name</label>
+            <input 
+              type="text" 
+              formControlName="name" 
+              class="form-control"
+              placeholder="Enter your full name">
+            <div class="error" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['required']">
+              Name is required
+            </div>
+          </div>
+
+     
+          <div class="form-group">
+            <label>Email Address</label>
+            <input 
+              type="email" 
+              formControlName="email" 
+              class="form-control"
+              placeholder="name@example.com">
+            <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']">
+              Email is required
+            </div>
+          </div>
+
+      
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input 
+              type="text" 
+              formControlName="phone" 
+              class="form-control"
+              placeholder="01xxxxxxxxx">
+            <div class="error" *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.errors?.['pattern']">
+              Enter valid phone number
+            </div>
+          </div>
+
+      
+          <div class="form-group">
+            <label>Password</label>
+            <input 
+              type="password" 
+              formControlName="password" 
+              class="form-control"
+              placeholder="**********">
+            <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minlength']">
+              Password must be at least 6 characters
+            </div>
+          </div>
+
+    
+          <div *ngIf="registerForm.get('role')?.value === 'RESTAURANT'" class="restaurant-box">
+            <h5>Restaurant Details</h5>
+            
+            <div class="form-group">
+              <label>Restaurant Name</label>
+              <input 
+                type="text" 
+                formControlName="restaurantName" 
+                class="form-control"
+                placeholder="Enter restaurant name">
+            </div>
+
+            <div class="form-group">
+              <label>Logo URL</label>
+              <input 
+                type="text" 
+                formControlName="logoUrl" 
+                class="form-control"
+                placeholder="https://example.com/logo.png">
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            [disabled]="registerForm.invalid" 
+            class="submit-btn">
+            Create Account
+          </button>
+
+          <div class="footer-text">
+            Already have an account? <a href="/login">Sign in</a>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>

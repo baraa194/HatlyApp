@@ -1,0 +1,112 @@
+<div class="auth-page">
+  <div class="auth-container">
+
+
+    <div class="auth-hero">
+      <div class="hero-pattern"></div>
+
+      <div class="ingredient-cluster" aria-hidden="true">
+        <span class="chip chip-1">🍅</span>
+        <span class="chip chip-2">🥑</span>
+        <span class="chip chip-3">🧀</span>
+        <span class="chip chip-4">🌿</span>
+        <span class="chip chip-5">🍕</span>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-icon">🍕</span>
+        </div>
+        <h1>Welcome back</h1>
+        <p>Log in to your Hatly account to continue discovering great recipes</p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <strong>12K+</strong>
+            <span>Recipes</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <strong>800+</strong>
+            <span>Restaurants</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="auth-form">
+      <div class="form-wrapper">
+
+        <h2>Sign in</h2>
+        <p class="subtitle">Enter your details to access your account</p>
+
+        @if (errormsg) {
+          <div class="form-alert">
+            <span class="form-alert-icon">⚠️</span>
+            {{ errormsg }}
+          </div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+          <!-- Email -->
+          <div class="form-group">
+            <label>Email address</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                placeholder="name@example.com">
+            </div>
+
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']) {
+              <div class="error">Email is required</div>
+            }
+
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']) {
+              <div class="error">Enter a valid email address</div>
+            }
+          </div>
+
+     
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                formControlName="password"
+                class="form-control"
+                placeholder="••••••••">
+            </div>
+
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']) {
+              <div class="error">Password is required</div>
+            }
+          </div>
+
+          <div class="forgot-row">
+            <a routerLink="/forget-password" class="link">Forgot password?</a>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid"
+            class="submit-btn">
+            Sign in
+          </button>
+
+          <div class="footer-text">
+            Don't have an account? <a routerLink="/register" class="link-strong">Sign up now</a>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>

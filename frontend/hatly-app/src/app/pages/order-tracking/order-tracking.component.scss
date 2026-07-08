@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+
+$color-bg: #FFF9F2;
+$color-primary: #E63946;
+$color-primary-dark: #C22C39;
+$color-ink: #2D2424;
+$color-ink-soft: #7A6F68;
+$color-gold: #FFB347;
+$color-basil: #588157;
+$color-card: #FFFFFF;
+$color-border: #F0E4D8;
+
+$font-display: 'Fraunces', serif;
+$font-body: 'Plus Jakarta Sans', sans-serif;
+
+* { box-sizing: border-box; }
+
+.tracking-page {
+  font-family: $font-body;
+  color: $color-ink;
+  background: $color-bg;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 32px 20px 56px;
+}
+
+.state-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: $color-ink-soft;
+
+  .state-loading-icon { font-size: 30px; margin-bottom: 10px; }
+  p { font-size: 15px; font-weight: 600; margin: 0; }
+}
+
+.state-error {
+  text-align: center;
+  padding: 30px 20px;
+  background: #FDEAEA;
+  border: 1px solid #F3B9BC;
+  border-radius: 16px;
+  color: $color-primary-dark;
+  font-weight: 700;
+}
+
+
+.order-card {
+  background: $color-card;
+  border: 1px solid $color-border;
+  border-top: 4px solid $color-primary;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 12px 30px -20px rgba(45, 36, 36, 0.25);
+}
+
+.order-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.order-id {
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 19px;
+  margin: 0;
+  color: $color-ink;
+}
+
+.status-pill {
+  background: #FDEAEA;
+  color: $color-primary-dark;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 5px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.payment-line {
+  margin: 0;
+  color: $color-ink-soft;
+  font-size: 13px;
+}
+
+
+.status-stepper {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding-top: 4px;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-align: center;
+
+  // connecting line
+  &:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: calc(50% + 20px);
+    width: calc(100% - 40px);
+    height: 3px;
+    background: $color-border;
+    z-index: 0;
+  }
+
+  &.completed:not(:last-child)::after {
+    background: $color-basil;
+  }
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $color-bg;
+  border: 2px solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s ease;
+}
+
+.step-label {
+  margin-top: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: $color-ink-soft;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  max-width: 72px;
+}
+
+.step.completed {
+  .step-circle {
+    background: $color-basil;
+    border-color: $color-basil;
+    color: #fff;
+  }
+  .step-label { color: $color-basil; }
+}
+
+.step.active {
+  .step-circle {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: #fff;
+    box-shadow: 0 0 0 5px rgba(230, 57, 70, 0.15);
+  }
+  .step-label { color: $color-primary; font-weight: 800; }
+}
+
+.searching-card {
+  margin-top: 20px;
+  padding: 28px 20px;
+  background: #FFF3E4;
+  border: 2px dashed $color-gold;
+  border-radius: 16px;
+  text-align: center;
+
+  .searching-icon { font-size: 36px; margin-bottom: 10px; }
+
+  h3 {
+    margin: 0 0 6px;
+    font-family: $font-display;
+    font-weight: 700;
+    font-size: 17px;
+    color: #8A5A15;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #9C5B1E;
+  }
+}
+
+
+.captain-card {
+  margin-top: 20px;
+  background: $color-card;
+  border: 1px solid $color-border;
+  border-left: 4px solid $color-basil;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 12px 30px -20px rgba(45, 36, 36, 0.25);
+}
+
+.captain-title {
+  margin: 0 0 14px;
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 17px;
+  color: #2F4A32;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.captain-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: $color-ink;
+  margin-bottom: 16px;
+
+  strong { color: $color-ink-soft; margin-right: 4px; }
+}
+
+.phone-link {
+  color: $color-basil;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.captain-map {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid $color-basil;
+}

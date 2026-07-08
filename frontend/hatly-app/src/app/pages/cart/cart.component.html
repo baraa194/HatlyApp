@@ -1,0 +1,109 @@
+<div class="cart-page">
+  <h2 class="cart-title">🛒 Your shopping cart</h2>
+
+  <div class="cart-grid">
+
+    <div class="cart-items-col">
+
+      @for (item of cartItems; track item.productBranchDetailId) {
+        <div class="cart-item-card">
+          <img
+            [src]="item.imgUrl || 'https://cdn-icons-png.flaticon.com/512/706/706164.jpg'"
+            class="item-image"
+            [alt]="item.name">
+
+          <div class="item-info">
+            <h5 class="item-name">{{ item.name }}</h5>
+            <p class="item-desc">{{ item.description }}</p>
+          </div>
+
+          <div class="item-price-col">
+            <span class="qty-badge">Qty: {{ item.quantity }}</span>
+            <div class="item-price">{{ item.price * item.quantity }} EGP</div>
+          </div>
+        </div>
+      } @empty {
+        <div class="cart-empty">
+          <h4>Your cart is empty 🍽️</h4>
+          <button class="empty-btn" [routerLink]="['/home']">
+            Go discover restaurants
+          </button>
+        </div>
+      }
+
+    </div>
+
+    @if (cartItems.length > 0) {
+      <div class="cart-summary-col">
+        <div class="summary-card">
+          <h4 class="summary-title">Order summary</h4>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>{{ subtotal }} EGP</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Service fee (5%)</span>
+            <span>{{ serviceFee }} EGP</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Delivery fee</span>
+            <span [class.free-fee]="deliveryFee === 0">
+              {{ deliveryFee === 0 ? 'Free' : deliveryFee + ' EGP' }}
+            </span>
+          </div>
+
+          <hr class="summary-divider">
+
+          <div class="payment-section">
+            <label class="payment-label">Payment method</label>
+
+            <div
+              class="payment-option"
+              [class.selected]="selectedPaymentMethod === 'CASH'"
+              (click)="selectedPaymentMethod = 'CASH'">
+              <input
+                class="payment-radio"
+                type="radio"
+                name="paymentMethod"
+                id="cashRadio"
+                [checked]="selectedPaymentMethod === 'CASH'">
+              <label class="payment-option-label" for="cashRadio">
+                💵 Cash on delivery
+              </label>
+            </div>
+
+            <div
+              class="payment-option"
+              [class.selected]="selectedPaymentMethod === 'STRIPE'"
+              (click)="selectedPaymentMethod = 'STRIPE'">
+              <input
+                class="payment-radio"
+                type="radio"
+                name="paymentMethod"
+                id="stripeRadio"
+                [checked]="selectedPaymentMethod === 'STRIPE'">
+              <label class="payment-option-label" for="stripeRadio">
+                💳 Credit / debit card (Stripe)
+              </label>
+            </div>
+          </div>
+
+          <hr class="summary-divider">
+
+          <div class="total-row">
+            <span>Total amount</span>
+            <span class="total-value">{{ totalPrice }} EGP</span>
+          </div>
+
+          <button (click)="checkoutOrder()" class="place-order-btn">
+            Place order 🚀
+          </button>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

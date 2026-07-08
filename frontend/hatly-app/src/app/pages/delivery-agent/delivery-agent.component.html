@@ -1,0 +1,102 @@
+<div class="captain-dashboard">
+@if(captainName)
+{
+<h2>Hi, Captain {{ captainName }} </h2>
+}
+@else{
+  <h2 class="dashboard-title">Captain Dashboard 🚴‍♂️</h2>
+}
+
+  <p class="dashboard-subtitle">Manage your profile details and live availability</p>
+
+
+  <div class="status-bar">
+    <div class="status-bar-left">
+      <span class="connection-status" [class.online]="isOnline" [class.offline]="!isOnline">
+        <span class="status-dot"></span>
+        {{ isOnline ? 'ONLINE' : 'OFFLINE' }}
+      </span>
+      <span class="duty-status">Duty status: <strong>{{ currentStatus }}</strong></span>
+    </div>
+
+    <div class="status-bar-right">
+      <label class="switch">
+        <input type="checkbox" [checked]="isOnline" (change)="toggleStatus($event)">
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label">Toggle availability</span>
+    </div>
+  </div>
+  <p class="success-message">
+    {{ successMessage ? '✓ ' + successMessage : '' }}
+  </p>
+
+
+  <div class="dash-card profile-card">
+    <h3 class="dash-card-title">Profile info</h3>
+
+    <div class="profile-grid">
+      <div class="profile-field">
+        <span class="field-label">User Num</span>
+        <span class="field-value">{{ agentData?.user_id }}</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Vehicle type</span>
+        <span class="field-value">{{ agentData?.vehicleType || 'Loading...' }}</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Vehicle number</span>
+        <span class="field-value">{{ agentData?.vehicleNumber || 'Loading...' }}</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Joined at</span>
+        <span class="field-value">{{ agentData?.joinedAt | date:'mediumDate' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- New order offer -->
+  @if (currentOrderOffer) {
+    <div class="offer-card">
+      <h3 class="offer-title">🔔 New order offer!</h3>
+
+      <div class="offer-details">
+        <div><strong>Order Num:</strong> #{{ currentOrderOffer.orderId }}</div>
+        <div><strong>Restaurant:</strong> {{ currentOrderOffer.restaurantName }}</div>
+        <div><strong>Destination city:</strong> {{ currentOrderOffer.customerAddress }}</div>
+        <div><strong>Total price:</strong> {{ currentOrderOffer.totalAmount }} EGP</div>
+      </div>
+
+      <div class="offer-actions">
+        <button (click)="acceptOrder()" class="btn-accept">Accept</button>
+        <button (click)="rejectOrder()" class="btn-reject">Reject</button>
+      </div>
+    </div>
+  }
+
+ 
+  @if (acceptedOrder) {
+    <div class="route-card">
+      <h3 class="route-title">🗺️ Active delivery route</h3>
+
+      <div class="route-details">
+        <div><strong>Order Num:</strong> #{{ acceptedOrder.orderId }}</div>
+        <div><strong>Customer name:</strong> {{ acceptedOrder.customerName }}</div>
+        <div><strong>Branch detailed address:</strong> {{ acceptedOrder.branch }}</div>
+        <div><strong>Total amount:</strong> {{ acceptedOrder.totalAmount }} EGP</div>
+      </div>
+
+      <div class="route-map">
+        <iframe
+          width="100%"
+          height="100%"
+          frameborder="0"
+          style="border:0"
+        [src]="mapUrl"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  }
+
+</div>

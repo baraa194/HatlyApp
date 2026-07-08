@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$color-bg: #FFF9F2;
+$color-primary: #E63946;
+$color-primary-dark: #C22C39;
+$color-ink: #2D2424;
+$color-ink-soft: #7A6F68;
+$color-gold: #FFB347;
+$color-basil: #588157;
+$color-card: #FFFFFF;
+$color-border: #F0E4D8;
+
+$font-display: 'Fraunces', serif;
+$font-body: 'Plus Jakarta Sans', sans-serif;
+
+* { box-sizing: border-box; }
+
+.home-page {
+  font-family: $font-body;
+  color: $color-ink;
+  background: $color-bg;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+
+
+.address-row { margin-bottom: 28px; }
+
+.address-label {
+  display: block;
+  font-size: 12px;
+  color: $color-ink-soft;
+  margin-bottom: 4px;
+}
+
+.address-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  font-family: $font-display;
+  font-size: 17px;
+  font-weight: 700;
+  color: $color-ink;
+  cursor: pointer;
+
+  &::after { margin-left: 4px; } 
+
+  &:hover { color: $color-primary; }
+}
+
+.address-value {
+  display: inline-block;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.address-menu {
+  min-width: 300px;
+  max-height: 320px;
+  overflow-y: auto;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px -18px rgba(45, 36, 36, 0.28);
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.address-item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover { background: $color-bg; }
+
+  &.selected {
+    background: #FDEAEA;
+
+    .address-item-name,
+    .address-item-detail { color: $color-primary-dark; }
+  }
+}
+
+.address-item-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.address-item-name {
+  font-weight: 700;
+  color: $color-ink;
+  text-transform: capitalize;
+}
+
+.default-badge {
+  background: $color-border;
+  color: $color-ink-soft;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.address-item-detail {
+  display: block;
+  margin-top: 2px;
+  color: $color-ink-soft;
+  font-size: 12px;
+}
+
+.add-address-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: center;
+  padding: 10px 12px;
+  color: $color-primary;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 12px;
+
+  &:hover { background: $color-bg; }
+}
+
+
+.search-row { margin-bottom: 28px; }
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: $color-card;
+  border: 1.5px solid $color-border;
+  border-radius: 16px;
+  padding: 12px 16px;
+  max-width: 520px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+
+  &:focus-within {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.10);
+  }
+}
+
+.search-icon { font-size: 15px; opacity: 0.8; }
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: $font-body;
+  font-size: 14px;
+  color: $color-ink;
+
+  &::placeholder { color: #B9ACA3; }
+}
+
+
+.section-title {
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 18px;
+  color: $color-ink;
+  margin-bottom: 14px;
+}
+
+
+.categories-section { margin-bottom: 32px; }
+
+.categories-slider {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.category-item {
+  text-align: center;
+  flex-shrink: 0;
+  width: 76px;
+}
+
+.category-img-box {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid $color-border;
+  margin: 0 auto 8px;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.category-item:hover .category-img-box {
+  border-color: $color-primary;
+  transform: translateY(-3px);
+}
+
+.category-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: $color-ink;
+  text-transform: capitalize;
+}
+
+// ============================================================
+// RESTAURANTS
+// ============================================================
+.restaurants-section { margin-top: 8px; }
+
+.restaurants-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.restaurant-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: $color-card;
+  border: 1px solid $color-border;
+  border-radius: 18px;
+  padding: 16px 20px;
+  cursor: pointer;
+  min-width: 0;
+  box-shadow: 0 6px 18px -14px rgba(45, 36, 36, 0.4);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+
+  &:hover {
+    box-shadow: 0 14px 28px -16px rgba(45, 36, 36, 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+.logo-container {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid $color-border;
+}
+
+.restaurant-logo { width: 100%; height: 100%; object-fit: cover; }
+
+.restaurant-info { flex-grow: 1; min-width: 0; }
+
+.restaurant-info-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.restaurant-name {
+  margin: 0;
+  font-weight: 700;
+  color: $color-ink;
+  font-family: $font-body;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.badge-open   { background: #E6F7ED; color: $color-basil; }
+.badge-closed { background: #FDEAEA; color: $color-primary-dark; }
+
+.restaurant-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: $color-ink-soft;
+
+  .rating { font-weight: 700; color: $color-gold; }
+  .dot { color: $color-border; }
+}
+
+.restaurants-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px 0;
+  color: $color-ink-soft;
+}
+
+
+@media (max-width: 640px) {
+  .home-page { padding: 20px 16px 48px; }
+  .restaurant-card { padding: 14px; }
+  .restaurants-list { grid-template-columns: 1fr; }
+}
