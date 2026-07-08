@@ -45,9 +45,10 @@
   * The customer receives immediate status updates (Pending $\rightarrow$ Out for Delivery $\rightarrow$ Delivered) and can **track the delivery agent's live movement on an interactive map**.
 * <p align="center">
 
-
+  <img src="https://github.com/user-attachments/assets/57252892-f3b9-4423-9165-3c2da161715d" alt="Delivery Notification" width="280"/>
    <img src="https://github.com/user-attachments/assets/5e0463c1-da8f-4355-bd23-972e60c3ed9c" alt="Delivery Notifications" width="280"/>
     <img src="https://github.com/user-attachments/assets/f5b5cb29-05f2-4954-898b-682a47d4e537" alt="Customer track Order" width="280"/>
+
 
    
 </p>
@@ -77,6 +78,9 @@ The client side is engineered with **Angular**, maximizing single-page performan
 * **Interactive Maps Integration:** Seamless map components render live geometry lines, customer coordinates, and active delivery vehicle routes dynamically.
 
 
+
+
+<img width="1366" height="634" alt="Screenshot (2984)" src="https://github.com/user-attachments/assets/e45f1108-cb5d-4918-8734-624e4887023a" />
 
 
 
