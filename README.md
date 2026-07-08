@@ -13,7 +13,7 @@
 * <p align="center">
 
 <img src="https://github.com/user-attachments/assets/32ffabc1-50e0-413a-beda-793fd82e51a1" alt="Register" width="280"/>
-   <img src="https://github.com/user-attachments/assets/32ffabc1-50e0-413a-beda-793fd82e51a1" alt="Login" width="280"/>
+   <img src="https://github.com/user-attachments/assets/1d9125f1-f1c8-40f4-8961-3c118fe64dcf"  alt="Login" width="280"/>
         <img src="https://github.com/user-attachments/assets/98f29dcf-0c66-416d-9c68-e3acd0882db3" alt="Reset Password" width="280"/>
 
 </p>
@@ -75,6 +75,7 @@ The client side is engineered with **Angular**, maximizing single-page performan
 * **Reactive State Management:** Utilizes **RxJS Observables** and dynamic streams to consume live HTTP payloads and feed real-time map trackers.
 * **Modular Codebase:** Implements clean feature-per-module encapsulation with strict **Angular Routing Guards** to lock down customer dashboards, restaurant panels, and agent views based on incoming JWT claims.
 * **Interactive Maps Integration:** Seamless map components render live geometry lines, customer coordinates, and active delivery vehicle routes dynamically.
+
 
 
 
