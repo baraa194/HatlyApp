@@ -80,7 +80,7 @@ The client side is engineered with **Angular**, maximizing single-page performan
 
 
 
-<img width="1366" height="634" alt="Screenshot (2984)" src="https://github.com/user-attachments/assets/e45f1108-cb5d-4918-8734-624e4887023a" />
+
 
 
 
