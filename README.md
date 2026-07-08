@@ -14,7 +14,8 @@
 
 <img src="https://github.com/user-attachments/assets/32ffabc1-50e0-413a-beda-793fd82e51a1" alt="Register" width="280"/>
    <img src="https://github.com/user-attachments/assets/32ffabc1-50e0-413a-beda-793fd82e51a1" alt="Login" width="280"/>
-   <img src="https://github.com/user-attachments/assets/70e88100-6fa8-4d51-8170-989fc048fc34" alt="Reset Password" width="280"/>
+        <img src="https://github.com/user-attachments/assets/98f29dcf-0c66-416d-9c68-e3acd0882db3" alt="Reset Password" width="280"/>
+
 </p>
 
 ### 🏪 2. Smart Location-Based Restaurant Browsing
@@ -27,7 +28,7 @@
    <img src="https://github.com/user-attachments/assets/3aac0858-df26-4ad4-bccf-896f8bc53d11" alt="Restaurants" width="280"/>
     <img src="https://github.com/user-attachments/assets/d814ba92-bab0-4a16-a37e-204ff87243f8" alt="Nearst Branch" width="280"/>
      <img src="https://github.com/user-attachments/assets/ad0d0497-45f9-4c0b-a706-941f6a95525f" alt="Cart" width="280"/>
-     <img src="https://github.com/user-attachments/assets/98f29dcf-0c66-416d-9c68-e3acd0882db3" alt="Credit Payment" width="280"/>
+      <img src="https://github.com/user-attachments/assets/70e88100-6fa8-4d51-8170-989fc048fc34" alt="Credit Payment" width="280"/>
 
 
    
