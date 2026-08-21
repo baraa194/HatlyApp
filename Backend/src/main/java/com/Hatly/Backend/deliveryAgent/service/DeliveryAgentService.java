@@ -7,6 +7,7 @@ import com.Hatly.Backend.deliveryAgent.model.AgentPresence;
 import com.Hatly.Backend.deliveryAgent.model.DeliveryAgent;
 import com.Hatly.Backend.deliveryAgent.repo.AgentPresenceRepo;
 import com.Hatly.Backend.deliveryAgent.repo.DeliveryAgentRepo;
+import com.Hatly.Backend.exceptions.TooManyRequestsException;
 import com.Hatly.Backend.order.enums.OrderStatus;
 import com.Hatly.Backend.order.model.Order;
 import com.Hatly.Backend.order.repo.OrderRepo;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,9 @@ public class DeliveryAgentService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     private static final String AGENTS_LOCATIONS_KEY = "ACTIVE_AGENTS_LOCATIONS";
+    private static final String RATE_LIMIT_KEY_PREFIX = "rate:location:";
+    private static final long RATE_LIMIT_SECONDS = 8;
+
     public UpdateAgentStatusResponse updateAgentStatus(Long id, Boolean IsOnline) {
       DeliveryAgent deliveryAgent = deliveryAgentRepo.findByUserId(id)
               .orElseThrow(() -> new RuntimeException( "DeliveryAgent Not Found"));
@@ -72,6 +77,15 @@ public class DeliveryAgentService {
 
     @Transactional
     public void updateAgentLocation(Long agentId, UpdateLocationRequest request) {
+        String rateKey = RATE_LIMIT_KEY_PREFIX + agentId;
+
+        Boolean isAllowed = redisTemplate.opsForValue()
+                .setIfAbsent(rateKey, "1", Duration.ofSeconds(RATE_LIMIT_SECONDS));
+
+        if (Boolean.FALSE.equals(isAllowed)) {
+
+            throw new TooManyRequestsException("Location update too frequent. Please wait a few seconds.");
+        }
 
         Point point = new Point(request.getLastLng().doubleValue(), request.getLastLat().doubleValue());
         DeliveryAgent agent = deliveryAgentRepo.findByUserId(agentId)
