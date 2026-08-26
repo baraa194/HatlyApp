@@ -2,11 +2,12 @@ package com.Hatly.Backend.resturant.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 
 @Data
-public class BranchResponse {
+public class BranchResponse implements Serializable {
     private Long id;
     private String addressDetailed;
 

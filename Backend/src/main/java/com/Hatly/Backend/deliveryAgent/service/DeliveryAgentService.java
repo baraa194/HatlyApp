@@ -78,32 +78,22 @@ public class DeliveryAgentService {
     @Transactional
     public void updateAgentLocation(Long agentId, UpdateLocationRequest request) {
         String rateKey = RATE_LIMIT_KEY_PREFIX + agentId;
-
         Boolean isAllowed = redisTemplate.opsForValue()
                 .setIfAbsent(rateKey, "1", Duration.ofSeconds(RATE_LIMIT_SECONDS));
-
         if (Boolean.FALSE.equals(isAllowed)) {
-
-            throw new TooManyRequestsException("Location update too frequent. Please wait a few seconds.");
+            throw new TooManyRequestsException
+                    ("Location update too frequent. Please wait a few seconds.");
         }
-
         Point point = new Point(request.getLastLng().doubleValue(), request.getLastLat().doubleValue());
         DeliveryAgent agent = deliveryAgentRepo.findByUserId(agentId)
                 .orElseThrow(() -> new RuntimeException("Delivery Agent Not Found"));
-
-
         AgentPresence presence = agentPresenceRepo.findByAgentId(agent.getId())
                 .orElse(new AgentPresence());
-
-
         if (presence.getId() == null) {
             presence.setAgent(agent);
-        }
-
-        presence.setLastLat(request.getLastLat());
+        }presence.setLastLat(request.getLastLat());
         presence.setLastLng(request.getLastLng());
         presence.setLastSeenAt(LocalDateTime.now());
-
         redisTemplate.opsForGeo().add(AGENTS_LOCATIONS_KEY, point, agentId.toString());
         agentPresenceRepo.save(presence);
     }
@@ -170,7 +160,7 @@ public class DeliveryAgentService {
         }
 
 
-        return deliveryAgentRepo.findAllByUserIdInAndStatusAndIsOnlineTrue(nearbyAgentIds, "AVAILABLE");
+        return deliveryAgentRepo.findAllByUserIdInAndStatusAndIsOnlineTrue(nearbyAgentIds, AgentStatus.AVAILABLE);
     }
     public void processOrderAssignment(Order order) {
 

@@ -34,10 +34,10 @@ public class PaymentController {
 
     public PaymentController(PaymentService paymentService,
                              PaymentStrategyFactory strategyFactory,
-                             PaymentProviderRepo paymentProviderRepo,OrderRepo orderRepo,
-                             PaymentRepo paymentRepo){
+                             PaymentProviderRepo paymentProviderRepo, OrderRepo orderRepo,
+                             PaymentRepo paymentRepo) {
         this.paymentService = paymentService;
-        this.strategyFactory= strategyFactory;
+        this.strategyFactory = strategyFactory;
         this.paymentProviderRepo = paymentProviderRepo;
         this.orderRepo = orderRepo;
         this.paymentRepo = paymentRepo;
@@ -47,6 +47,7 @@ public class PaymentController {
     public ResponseEntity<List<PaymentProviderResponse>> getAvailableProviders() {
         return ResponseEntity.ok(paymentService.getAvailableProviders());
     }
+
     @PostMapping("/checkout")
     public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, Object> request) {
         Long orderId = Long.valueOf(request.get("orderId").toString());
@@ -78,31 +79,10 @@ public class PaymentController {
             return ResponseEntity.status(400).body("Webhook error: " + e.getMessage());
         }
     }
+
     @GetMapping("/success")
     public ResponseEntity<String> handleSuccessPayment(@RequestParam("id") Long orderId) {
-
-        Order order = orderRepo.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order id not found"));
-
-
-        order.setPaymentStatus(PaymentStatus.PAID);
-        order.setStatus(OrderStatus.PREPARING);
-        orderRepo.save(order); // حفظ تحديث الطلب
-
-
-        PaymentProvider stripeProvider = paymentProviderRepo.findByProviderName(PaymentProviderName.STRIPE)
-                .orElseThrow(() -> new RuntimeException("Payment Provider STRIPE not found"));
-
-        Payment payment = new Payment();
-        payment.setOrder(order);
-        payment.setAmount(order.getTotal());
-        payment.setStatus(PaymentStatus.PAID);
-        payment.setCurrency(Currency.EGP);
-        payment.setRefunded(false);
-        payment.setProvider(stripeProvider);
-
-        paymentRepo.save(payment);
-
-        return ResponseEntity.ok("Payment saved successfully in Database!");
+        paymentService.markOrderAsPaid(orderId);
+        return ResponseEntity.ok("Order marked as PAID successfully!");
     }
 }

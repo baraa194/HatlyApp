@@ -137,7 +137,7 @@ public class OrderService {
 
         Order savedOrder = orderrepo.save(order);
 
-        deliveryAgentService.processOrderAssignment(savedOrder);
+
 
         return orderMapper.toResponse(savedOrder);
     }

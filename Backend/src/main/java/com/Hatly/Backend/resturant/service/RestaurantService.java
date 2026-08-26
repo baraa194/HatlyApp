@@ -38,7 +38,7 @@ public class RestaurantService {
     @Autowired
     private UserRepo userrepo;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-   // @Cacheable(value = "restaurant", key = "#id")
+    @Cacheable(value = "restaurant", key = "#id")
     public RestaurantResponse getRestaurant(Long id) {
      Restaurant restaurant = restaurantrepo.findById(id).
              orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + id));
@@ -50,7 +50,7 @@ public class RestaurantService {
 
     }
     @Transactional
-   // @CacheEvict(value = "all_restaurants", allEntries = true)
+   @CacheEvict(value = "all_restaurants", allEntries = true)
     public Map<String,Object> createRestaurant(CreateRestaurantDTO restaurantRequest) {
         Restaurant restaurant = new Restaurant();
         restaurant.setName(restaurantRequest.getName());
@@ -86,7 +86,7 @@ public class RestaurantService {
     }
 
     @Transactional
-   // @CacheEvict(value = {"restaurant", "all_restaurants"}, key = "#id", allEntries = false, beforeInvocation = false)
+   @CacheEvict(value = {"restaurant", "all_restaurants"}, key = "#id", allEntries = false, beforeInvocation = false)
     public RestaurantResponse updateRestaurant(Long id, RestaurantRequest req) {
 
         Restaurant existingRestaurant = restaurantrepo.findById(id)
@@ -105,7 +105,7 @@ public class RestaurantService {
 
         return responseMapper.toResponse(updatedRestaurant, ownerMember.getUser().getId());
     }
-   // @Cacheable(value = "all_restaurants")
+    @Cacheable(value = "all_restaurants")
    public List<RestaurantResponse> getAllRestaurants() {
        List<Restaurant> restaurants = restaurantrepo.findAll();
 
@@ -121,7 +121,7 @@ public class RestaurantService {
    }
 
     @Transactional
-    //@CacheEvict(value = {"restaurant", "all_restaurants"}, key = "#id")
+    @CacheEvict(value = {"restaurant", "all_restaurants"}, key = "#id")
     public void deleteRestaurant(Long id) {
         Restaurant restaurant = restaurantrepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + id));

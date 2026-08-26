@@ -1,5 +1,6 @@
 package com.Hatly.Backend.deliveryAgent.repo;
 
+import com.Hatly.Backend.deliveryAgent.enums.AgentStatus;
 import com.Hatly.Backend.deliveryAgent.model.DeliveryAgent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,5 +12,5 @@ import java.util.Optional;
 public interface DeliveryAgentRepo extends JpaRepository<DeliveryAgent,Long> {
     //Optional<DeliveryAgent> findByRestaurnat_branch_id(Long id);
     Optional<DeliveryAgent> findByUserId(Long id);
-    List<DeliveryAgent> findAllByUserIdInAndStatusAndIsOnlineTrue(List<Long> ids, String status);
+    List<DeliveryAgent> findAllByUserIdInAndStatusAndIsOnlineTrue(List<Long> ids, AgentStatus status);
 }

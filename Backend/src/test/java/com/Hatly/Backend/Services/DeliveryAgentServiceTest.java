@@ -188,51 +188,30 @@ public class DeliveryAgentServiceTest {
         verify(orderrepo, Mockito.never()).save(any(Order.class));
     }
     @Test
-    void updateAgentLocation_success() {
-
-        Long agentId = 123L;
+    void updateAgentLocation_success() {Long agentId = 123L;
         UpdateLocationRequest request = new UpdateLocationRequest();
         request.setLastLat(new BigDecimal("30.0444"));
         request.setLastLng(new BigDecimal("31.2357"));
-        User mockUser = new User();
-        mockUser.setId(agentId);
-
+        User mockUser = new User();mockUser.setId(agentId);
         DeliveryAgent mockAgent = new DeliveryAgent();
-        mockAgent.setId(10L);
-        mockAgent.setUser(mockUser);
-
+        mockAgent.setId(10L);mockAgent.setUser(mockUser);
         AgentPresence mockPresence = new AgentPresence();
-
-
-
         when(valueOperations.setIfAbsent(anyString(), eq("1"), any(Duration.class)))
                 .thenReturn(true);
-
         when(deliveryAgentRepo.findByUserId(agentId))
                 .thenReturn(Optional.of(mockAgent));
-
         when(agentPresenceRepo.findByAgentId(mockAgent.getId()))
                 .thenReturn(Optional.of(mockPresence));
-
-
         deliveryAgentService.updateAgentLocation(agentId, request);
-
-
         verify(valueOperations).setIfAbsent(
                 eq("rate:location:" + agentId),
                 eq("1"),
                 any(Duration.class)
-        );
-
-        verify(geoOperations).add(
+        );verify(geoOperations).add(
                 eq("ACTIVE_AGENTS_LOCATIONS"),
                 any(Point.class),
                 eq(agentId.toString())
-        );
-
-        verify(agentPresenceRepo).save(any(AgentPresence.class));
-
-    }
+        );verify(agentPresenceRepo).save(any(AgentPresence.class));}
     @Test
     void updateAgentLocation_rateLimited_throwsException() {
 
