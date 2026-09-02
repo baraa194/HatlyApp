@@ -30,8 +30,7 @@ public class PaymentCompletedListener implements StreamListener<String, MapRecor
 
             Order order = orderRepo.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found"));
-            if (order.getStatus() != OrderStatus.PREPARING ||
-                    order.getPaymentStatus() != PaymentStatus.PAID) {
+            if (order.getPaymentStatus() != PaymentStatus.PAID) {
                 log.warn("Order {} already processed or not in expected state", orderId);
                 acknowledge(message);
                 return;

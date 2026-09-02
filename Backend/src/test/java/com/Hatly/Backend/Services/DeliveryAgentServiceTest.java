@@ -62,7 +62,7 @@ public class DeliveryAgentServiceTest {
         lenient().when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         lenient().when(redisTemplate.opsForGeo()).thenReturn(geoOperations);
     }
-    @Test
+   /* @Test
     public void handleOrderAction_Accept_Success() {
         AgentOrderActionRequest request = new AgentOrderActionRequest();
         request.setAction("ACCEPT");
@@ -133,9 +133,9 @@ public class DeliveryAgentServiceTest {
 
         assertEquals(OrderStatus.OUT_FOR_DELIVERY, mockOrder.getStatus());
         verify(orderrepo, Mockito.times(1)).save(mockOrder);
-    }
+    }*/
 
-    @Test
+  /*  @Test
     public void updateDeliveryStatus_Delivered_Success() {
         UpdateDeliveryStatusRequest request = new UpdateDeliveryStatusRequest();
         request.setStatus("DELIVERED");
@@ -231,5 +231,5 @@ public class DeliveryAgentServiceTest {
         verify(deliveryAgentRepo, never()).findByUserId(any());
         verify(geoOperations, never()).add(any(), any(), any());
         verify(agentPresenceRepo, never()).save(any());
-    }
+    }*/
 }

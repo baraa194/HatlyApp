@@ -2,11 +2,15 @@ package com.Hatly.Backend.order.enums;
 
 public enum OrderStatus {
     PENDING,
-    ACCEPTED,
+    PAYMENT_PROCESSING,
     PREPARING,
-    OUT_FOR_DELIVERY,
+    READY_FOR_PICKUP,
+    ASSIGNED,
+    ON_THE_WAY,
+    PICKED_UP,
     DELIVERED,
+    PAYMENT_FAILED,
     CANCELLED,
     REFUNDED,
-    READY_FOR_PICKUP
+
 }

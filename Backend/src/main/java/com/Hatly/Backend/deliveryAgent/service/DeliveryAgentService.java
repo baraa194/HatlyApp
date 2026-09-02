@@ -11,7 +11,9 @@ import com.Hatly.Backend.exceptions.TooManyRequestsException;
 import com.Hatly.Backend.order.enums.OrderStatus;
 import com.Hatly.Backend.order.model.Order;
 import com.Hatly.Backend.order.repo.OrderRepo;
+import com.Hatly.Backend.order.service.OrderStateService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.*;
 import org.springframework.data.geo.Point;
@@ -29,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@Slf4j
 public class DeliveryAgentService {
     @Autowired
     private DeliveryAgentRepo deliveryAgentRepo;
@@ -40,6 +43,8 @@ public class DeliveryAgentService {
     private AgentNotificationService agentNotificationService;
     @Autowired
     private DeliveryAgentMapper deliveryAgentMapper;
+    @Autowired
+    private OrderStateService orderStateService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     private static final String AGENTS_LOCATIONS_KEY = "ACTIVE_AGENTS_LOCATIONS";
@@ -98,12 +103,11 @@ public class DeliveryAgentService {
         agentPresenceRepo.save(presence);
     }
 
-   @Transactional
+    @Transactional
     public void updateDeliveryStatus(Long orderId, Long agentId, UpdateDeliveryStatusRequest request) {
 
         Order order = orderrepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-
 
         if (order.getDeliveryAgent() == null || !order.getDeliveryAgent().getUser().getId().equals(agentId)) {
             throw new RuntimeException("Unauthorized! This order is not assigned to this agent.");
@@ -111,28 +115,24 @@ public class DeliveryAgentService {
 
         String newStatus = request.getStatus().toUpperCase();
 
-        if ("OUT_FOR_DELIVERY".equals(newStatus)) {
-            order.setStatus(OrderStatus.OUT_FOR_DELIVERY);
-            orderrepo.save(order);
-            System.out.println("Order #" + orderId + " is PICKED_UP by Agent #" + agentId);
+        if ("PICKED_UP".equals(newStatus)) {
+
+            orderStateService.transition(orderId, OrderStatus.PICKED_UP);
+            log.info("Order #{} is PICKED_UP by Agent #{}", orderId, agentId);
+
+        } else if ("ON_THE_WAY".equals(newStatus)) {
+
+            orderStateService.transition(orderId, OrderStatus.ON_THE_WAY);
 
         } else if ("DELIVERED".equals(newStatus)) {
 
-            order.setStatus(OrderStatus.DELIVERED);
-            orderrepo.save(order);
-
+            orderStateService.transition(orderId, OrderStatus.DELIVERED);
 
             DeliveryAgent agent = order.getDeliveryAgent();
             agent.setStatus(AgentStatus.AVAILABLE);
             deliveryAgentRepo.save(agent);
-
-
-           // BigDecimal deliveryEarnings = order.getTotal().multiply(new BigDecimal("0.10")); // 10% أرباح
-
-
-
         } else {
-            throw new IllegalArgumentException("Invalid status! Only PICKED_UP or DELIVERED are allowed.");
+            throw new IllegalArgumentException("Invalid status! Only PICKED_UP, ON_THE_WAY, or DELIVERED are allowed.");
         }
     }
     public List<DeliveryAgent> findNearbyAvailableAgentsFromRedis( BigDecimal resLat, BigDecimal resLng, double radiusInKm) {
@@ -189,7 +189,7 @@ public class DeliveryAgentService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
 
-        order.setStatus(OrderStatus.READY_FOR_PICKUP);
+     orderStateService.transition(orderId, OrderStatus.READY_FOR_PICKUP);
         orderrepo.save(order);
         processOrderAssignment(order);
     }
@@ -211,9 +211,8 @@ public class DeliveryAgentService {
 
 
             order.setDeliveryAgent(agent);
-            order.setStatus(OrderStatus.READY_FOR_PICKUP);
             orderrepo.save(order);
-
+            orderStateService.transition(orderId, OrderStatus.ASSIGNED);
 
             agent.setStatus(AgentStatus.BUSY);
             deliveryAgentRepo.save(agent);

@@ -3,6 +3,7 @@ package com.Hatly.Backend.payment.service;
 import com.Hatly.Backend.order.enums.OrderStatus;
 import com.Hatly.Backend.order.model.Order;
 import com.Hatly.Backend.order.repo.OrderRepo;
+import com.Hatly.Backend.order.service.OrderStateService;
 import com.Hatly.Backend.payment.dto.PaymentProviderResponse;
 import com.Hatly.Backend.payment.enums.Currency;
 import com.Hatly.Backend.payment.enums.PaymentMethod;
@@ -46,6 +47,8 @@ public class PaymentService {
     PaymentRepo paymentrepo;
     @Autowired
     PaymentProviderRepo paymentProviderrepo;
+    @Autowired
+    OrderStateService orderStateService;
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
@@ -108,6 +111,7 @@ public class PaymentService {
 
 
         }
+        orderStateService.transition(order.getId(),OrderStatus.PAYMENT_PROCESSING);
         long orderAmountInCents = order.getTotal()
                 .multiply(new BigDecimal(100)).longValue();
 
@@ -241,7 +245,7 @@ public class PaymentService {
 
 
         order.setPaymentStatus(PaymentStatus.PAID);
-        order.setStatus(OrderStatus.PREPARING);
+      orderStateService.transition(orderId,OrderStatus.PREPARING);
         orderrepo.save(order);
 
         log.info("Payment successfully marked as PAID for orderId={}, paymentId={}", orderId, payment.getId());

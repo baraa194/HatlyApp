@@ -52,8 +52,7 @@ public class OrderService {
     final OrderMapper orderMapper;
     final PaymentProviderRepo providerrepo;
     private final RestaurantRepo restaurantRepo;
-    private final DeliveryAgentService deliveryAgentService;
-    private final AgentNotificationService agentNotificationService;
+    private final OrderStateService orderStateService;
 
 
     public OrderResponse createOrder(OrderRequest request, Long userId) {
@@ -79,7 +78,6 @@ public class OrderService {
         order.setDeliveryLat(request.getDeliveryLat());
         order.setDeliveryLng(request.getDeliveryLng());
         order.setCreatedAt(LocalDateTime.now());
-        order.setStatus(OrderStatus.PENDING);
         order.setPaymentStatus(PaymentStatus.PENDING);
         order.setPaymentProvider(provider);
 
@@ -136,7 +134,7 @@ public class OrderService {
 
 
         Order savedOrder = orderrepo.save(order);
-
+        orderStateService.transition(order.getId(), OrderStatus.PENDING);
 
 
         return orderMapper.toResponse(savedOrder);

@@ -1,5 +1,6 @@
 package com.Hatly.Backend.config;
 
+import com.Hatly.Backend.order.service.OrderStatusStreamListener;
 import com.Hatly.Backend.payment.service.PaymentCompletedListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -22,45 +23,44 @@ public class RedisStreamConfig {
     public StreamMessageListenerContainer<String, MapRecord<String, String, String>> streamContainer(
             RedisConnectionFactory connectionFactory,
             StringRedisTemplate redisTemplate,
-            PaymentCompletedListener paymentCompletedListener) {
+            PaymentCompletedListener paymentCompletedListener,
+            OrderStatusStreamListener orderStatusStreamListener) {
 
-        String streamKey = "payment-events";
-        String groupName = "payment-group";
-
-        try {
-            redisTemplate.getConnectionFactory()
-                    .getConnection()
-                    .streamCommands()
-                    .xGroupCreate(
-                            streamKey.getBytes(),
-                            groupName,
-                            ReadOffset.from("0-0"),
-                            true // MKSTREAM = creates stream if not exists
-                    );
-            log.info("Successfully initialized Redis Stream '{}' and Group '{}'", streamKey, groupName);
-        } catch (Exception e) {
-            log.info("Consumer group '{}' is already initialized.", groupName);
-        }
-
+        createGroupIfNotExists(redisTemplate, "payment-events", "payment-group");
+        createGroupIfNotExists(redisTemplate, "order-status-stream", "order-group");
 
         StreamMessageListenerContainer.StreamMessageListenerContainerOptions<String, MapRecord<String, String, String>> options =
                 StreamMessageListenerContainer.StreamMessageListenerContainerOptions
                         .builder()
-                        .pollTimeout(Duration.ofSeconds(1))
+                        .pollTimeout(Duration.ofSeconds(2))
                         .build();
 
         StreamMessageListenerContainer<String, MapRecord<String, String, String>> container =
                 StreamMessageListenerContainer.create(connectionFactory, options);
 
-
+        // مهم: استخدم ReadOffset.latest()
         container.receive(
-                Consumer.from(groupName, "payment-consumer-1"),
-                StreamOffset.create(streamKey, ReadOffset.lastConsumed()),
+                Consumer.from("payment-group", "payment-consumer-1"),
+                StreamOffset.create("payment-events", ReadOffset.from(">")),
                 paymentCompletedListener
         );
 
-
+        container.receive(
+                Consumer.from("order-group", "order-consumer-1"),
+                StreamOffset.create("order-status-stream", ReadOffset.from(">")),
+                orderStatusStreamListener
+        );
         container.start();
+        log.info("Redis Stream listeners started successfully");
         return container;
+    }
+
+    private void createGroupIfNotExists(StringRedisTemplate redisTemplate, String streamKey, String groupName) {
+        try {
+            redisTemplate.opsForStream().createGroup(streamKey, ReadOffset.from("0-0"), groupName);
+            log.info("Created stream group: {} on {}", groupName, streamKey);
+        } catch (Exception e) {
+            log.info("Group {} already exists on {}", groupName, streamKey);
+        }
     }
 }
