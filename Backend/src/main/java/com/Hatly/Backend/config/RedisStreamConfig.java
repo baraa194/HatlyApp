@@ -38,7 +38,7 @@ public class RedisStreamConfig {
         StreamMessageListenerContainer<String, MapRecord<String, String, String>> container =
                 StreamMessageListenerContainer.create(connectionFactory, options);
 
-        // مهم: استخدم ReadOffset.latest()
+
         container.receive(
                 Consumer.from("payment-group", "payment-consumer-1"),
                 StreamOffset.create("payment-events", ReadOffset.from(">")),

@@ -1,20 +1,13 @@
 package com.Hatly.Backend.payment.controller;
 
-import com.Hatly.Backend.order.enums.OrderStatus;
-import com.Hatly.Backend.order.model.Order;
 import com.Hatly.Backend.order.repo.OrderRepo;
 import com.Hatly.Backend.payment.dto.PaymentProviderResponse;
-import com.Hatly.Backend.payment.enums.Currency;
 import com.Hatly.Backend.payment.enums.PaymentProviderName;
-import com.Hatly.Backend.payment.enums.PaymentStatus;
-import com.Hatly.Backend.payment.model.Payment;
-import com.Hatly.Backend.payment.model.PaymentProvider;
 import com.Hatly.Backend.payment.repo.PaymentProviderRepo;
 import com.Hatly.Backend.payment.repo.PaymentRepo;
-import com.Hatly.Backend.payment.service.PaymentService;
+import com.Hatly.Backend.payment.service.StripePaymentService;
 import com.Hatly.Backend.payment.service.PaymentStrategy;
 import com.Hatly.Backend.payment.service.PaymentStrategyFactory;
-import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,18 +18,18 @@ import java.util.Map;
 @RequestMapping("/payments")
 public class PaymentController {
 
-    private final PaymentService paymentService;
+    private final StripePaymentService stripePaymentService;
     private final PaymentStrategyFactory strategyFactory;
     private final PaymentProviderRepo paymentProviderRepo;
     private final OrderRepo orderRepo;
     private final PaymentRepo paymentRepo;
 
 
-    public PaymentController(PaymentService paymentService,
+    public PaymentController(StripePaymentService stripePaymentService,
                              PaymentStrategyFactory strategyFactory,
                              PaymentProviderRepo paymentProviderRepo, OrderRepo orderRepo,
                              PaymentRepo paymentRepo) {
-        this.paymentService = paymentService;
+        this.stripePaymentService = stripePaymentService;
         this.strategyFactory = strategyFactory;
         this.paymentProviderRepo = paymentProviderRepo;
         this.orderRepo = orderRepo;
@@ -45,7 +38,7 @@ public class PaymentController {
 
     @GetMapping("/providers")
     public ResponseEntity<List<PaymentProviderResponse>> getAvailableProviders() {
-        return ResponseEntity.ok(paymentService.getAvailableProviders());
+        return ResponseEntity.ok(stripePaymentService.getAvailableProviders());
     }
 
     @PostMapping("/checkout")
@@ -72,7 +65,7 @@ public class PaymentController {
             @RequestHeader("Stripe-Signature") String sigHeader) {
 
         try {
-            paymentService.processWebhook(payload, sigHeader);
+            stripePaymentService.processWebhook(payload, sigHeader);
             return ResponseEntity.ok("Webhook verified and processed successfully");
         } catch (Exception e) {
 
@@ -82,7 +75,7 @@ public class PaymentController {
 
     @GetMapping("/success")
     public ResponseEntity<String> handleSuccessPayment(@RequestParam("id") Long orderId) {
-        paymentService.markOrderAsPaid(orderId);
+        stripePaymentService.markOrderAsPaid(orderId);
         return ResponseEntity.ok("Order marked as PAID successfully!");
     }
 }

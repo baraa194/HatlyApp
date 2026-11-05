@@ -5,16 +5,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StripePaymentStrategy implements PaymentStrategy{
-    private final PaymentService paymentService;
+    private final StripePaymentService stripePaymentService;
 
-    public StripePaymentStrategy(PaymentService paymentService) {
-        this.paymentService = paymentService;
+    public StripePaymentStrategy(StripePaymentService stripePaymentService) {
+        this.stripePaymentService = stripePaymentService;
     }
 
     @Override
     public String processPayment(Long orderId) throws Exception {
 
-        return paymentService.createStripeSession(orderId);
+        return stripePaymentService.createStripeSession(orderId);
     }
 
     @Override

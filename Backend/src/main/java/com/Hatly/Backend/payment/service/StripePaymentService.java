@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class PaymentService {
+public class StripePaymentService {
 
     @Autowired
     private PaymentProviderRepo paymentProviderRepo;
