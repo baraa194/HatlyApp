@@ -56,7 +56,7 @@
 ## 🛠️ Technical Implementation (Backend)
 
 Built using **Java & Spring Boot**, the backend emphasizes database optimization, strict caching boundaries, event streaming, and high-frequency data handling.
-
+* **Containerization (Docker):** Fully containerized using a multi-stage Docker build based on eclipse-temurin:21-jre-alpine. The final image is lightweight, includes a health check via **Spring Boot Actuator** (/actuator/health), and is designed for reliable deployment and orchestration.
 * **Decoupled Media Storage (Object Storage Bucket):** Optimized for maximum server performance and zero disk-space overhead; restaurant logos and product images are never saved locally on the backend server. Instead, they are securely offloaded and served directly via cloud-ready **Object Storage Buckets**, keeping the API fast, stateless, and fully scalable.
 * **High-Frequency Caching & Geospatial Tracking (Redis):**
   * Used to store and update live agent locations via a **10-second tracking interval background service**. Storing coordinates in memory eliminates complex, resource-heavy SQL database calculations.
