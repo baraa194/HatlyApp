@@ -9,6 +9,7 @@ import com.Hatly.Backend.order.model.Order;
 import com.Hatly.Backend.order.repo.OrderRepo;
 import com.Hatly.Backend.order.service.OrderService;
 import com.Hatly.Backend.order.mapper.OrderMapper;
+import com.Hatly.Backend.order.service.OrderStateService;
 import com.Hatly.Backend.payment.enums.PaymentProviderName;
 import com.Hatly.Backend.payment.model.PaymentProvider;
 import com.Hatly.Backend.payment.repo.PaymentProviderRepo;
@@ -33,6 +34,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -60,6 +62,8 @@ public class OrderServiceTest {
 
     @Mock
     private OrderMapper orderMapper;
+    @Mock
+    private OrderStateService orderStateService;
 
     @InjectMocks
     private OrderService orderService;
@@ -103,7 +107,8 @@ public class OrderServiceTest {
         Mockito.when(userrepo.findById(1L)).thenReturn(Optional.of(new User()));
         Mockito.when(providerrepo.findByProviderName(PaymentProviderName.CASH)).thenReturn(Optional.of(new PaymentProvider()));
         Mockito.when(productBranchDetailRepository.findById(200L)).thenReturn(Optional.of(mockProductDetail));
-
+        Mockito.when(orderStateService.transition(anyLong(), any(OrderStatus.class)))
+                .thenReturn(null);
         Mockito.when(orderrepo.save(any(Order.class))).thenAnswer(invocation -> {
             Order orderToSave = invocation.getArgument(0);
             orderToSave.setId(1L);

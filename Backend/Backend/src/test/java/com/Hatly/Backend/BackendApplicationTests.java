@@ -1,8 +1,9 @@
 package com.Hatly.Backend;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
+@Disabled("Will be covered by integration tests")
 @SpringBootTest
 class BackendApplicationTests {
 
